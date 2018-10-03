@@ -70,57 +70,37 @@ class FilmesController {
         .catch(err => res.send(err.message))
     }
     */
-
-    //Método responsável por retornar a data dos filmes em lançamento. por exemplo ele verifica a data atual e tira 6 meses dessa data.
-    //Regra 1.
-    returnDataLancamentos() {
-        //Jogando dados da data atual em uma variável.
+	
+	//Método responsável por realizar o cálculo da data conforme o parâmetro de meses passados.
+	returnCalculoData(qtdMeses){
+		//Jogando dados da data atual em uma variável.
         let dataAtual = new Date();
-        //Jogando o mês atual menos 6 na variável CalculoMesLancamento.
-        const CalculoMesLancamento = dataAtual.setMonth((dataAtual.getMonth() - 6));
+        //Jogando o mês atual menos o valor na variável CalculoData.
+        const CalculoData = dataAtual.setMonth((dataAtual.getMonth() - qtdMeses));
         //Utilizando comando do mongodb e enviando a string de pesquisa para obter resposta.
-        return CalculoMesLancamento;
-    }
-    //Método responsável por retornar a data de pesquisa de filmes que são maiores que a data de lançamento em 18 meses.
-    //Regra 2.
-    returnDezoitoMeses() {
-        //Colocando a data atual na variável dataAtual.
-        let dataAtual = new Date();
-        //Colocando na variável filmesDepoisLancamento a dataAtual - 18 meses.
-        const filmesDepoisLancamento = dataAtual.setMonth((dataAtual.getMonth() - 18));
-        let stringPesquisa = filmesDepoisLancamento;
-        return stringPesquisa;
-    }
-    //Método responsável por retornar a data de pesquisa de filmes que são maiores que a data de 18 meses e menor que 4 anos.
-    //Regra 3 e 4.
-    returnQuatroAnos() {
-        let dataAtual = new Date();
-        //Colocano na variável a data atual - 48 meses.
-        const filmesDepoisDezoitoMeses = dataAtual.setMonth((dataAtual.getMonth() - 48));
-        let stringPesquisa = filmesDepoisDezoitoMeses;
-        return stringPesquisa;
-    }
+        return CalculoData;
+	}
     //Método reponsável por fazer update na Regra 1.
     updateLancamentos() {
-        this.Filme.updateMany({ dataLancamento: { $gt: `${this.returnDataLancamentos()}` } }, { $set: { "valorLocacao": 14.99 } })
+        this.Filme.updateMany({ dataLancamento: { $gt: `${this.returnCalculoData(6)}` } }, { $set: { "valorLocacao": 14.99 } })
             .then(() => console.log('Preços Conforme Regra 1 Atualizados!'))
             .catch(err => console.log(err.message));
     }
     //Método que faz atualização do preço dos produtos conforme regra 1.
     updateRegra2() {
-        this.Filme.updateMany({ dataLancamento: { $gte: `${this.returnDezoitoMeses()}`, $lte: `${this.returnDataLancamentos()}` } }, { $set: { "valorLocacao": 7.99 } })
+        this.Filme.updateMany({ dataLancamento: { $gte: `${this.returnCalculoData(18)}`, $lte: `${this.returnCalculoData(6)}` } }, { $set: { "valorLocacao": 7.99 } })
             .then(() => console.log('Preços Conforme Regra 2 Atualizados!'))
             .catch(err => console.log(err.message));
     }
     //Método que faz atualização do preço dos produtos conforme regra 3.
     updateRegra3() {
-        this.Filme.updateMany({ dataLancamento: { $gte: `${this.returnQuatroAnos()}`, $lt: `${this.returnDezoitoMeses()}` } }, { $set: { "valorLocacao": 3.99 } })
+        this.Filme.updateMany({ dataLancamento: { $gte: `${this.returnCalculoData(48)}`, $lt: `${this.returnCalculoData(18)}` } }, { $set: { "valorLocacao": 3.99 } })
             .then(() => console.log('Preços Conforme Regra 3 Atualiados!'))
             .catch(err => console.log(err.message));
     }
     //Método que faz atualização do preço dos produtos conforme regra 4.
     updateRegra4() {
-        this.Filme.updateMany({ dataLancamento: { $lt: `${this.returnQuatroAnos()}` } }, { $set: { "valorLocacao": 1.99 } })
+        this.Filme.updateMany({ dataLancamento: { $lt: `${this.returnCalculoData(48)}` } }, { $set: { "valorLocacao": 1.99 } })
             .then(() => console.log('Preços Conforme Regra 4 Atualizados!'))
             .catch(err => console.log(err.message));
     }
