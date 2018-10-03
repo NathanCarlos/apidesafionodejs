@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 
-const clienteSchema = new Schema({
+const UserSchema = new Schema({
   nome: {
     type: String,
     required: true
@@ -20,6 +20,9 @@ const clienteSchema = new Schema({
   filmesAlugados: {
     type: [String]
   },
+  permissao: {
+    type: [String]
+  },
   saldo: {
     type: Number
   },
@@ -34,4 +37,4 @@ const clienteSchema = new Schema({
     default: true
   },
 });
-module.exports = mongoose.model('cliente', clienteSchema, 'clientes');
+module.exports = mongoose.model('user', UserSchema, 'users');

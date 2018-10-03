@@ -1,5 +1,5 @@
 {
   "database": {
-    "mongoUrl": ""
+    "mongoUrl": "mongodb://admin:nathan123456@ds117423.mlab.com:17423/programa_de_formacao"
   }
 }
