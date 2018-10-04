@@ -32,7 +32,7 @@ class FilmesController {
     }
     //Método para realizar a busca de filmes que estão em lançamento. (Até 6 meses da data de lançamento)
     searchNews(req, res) {
-        return this.Filme.find({ dataLancamento: { $gte: `${this.returnDataLancamentos()}` } })
+        return this.Filme.find({ dataLancamento: { $gte: `${this.returnCalculoData(6)}` } })
             .then(filmes => { res.send(filmes) })
             .catch(err => res.send(stringPesquisa))
     }
