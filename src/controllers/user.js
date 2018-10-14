@@ -11,10 +11,16 @@ class UsersController {
         .catch(err => res.send(err.message));
   }
   //Selecionando todos os usuários.
-  get(req, res) {
-    return this.User.find({})
-      .then(users => res.send(users))
-      .catch(err => res.status(400).send(err.message));
+  async get(req, res) {
+    try
+    {
+      let resultado = await this.User.find({});
+      return res.status(200).send(resultado);
+    }
+    catch(e)
+    {
+      res.status(400).send(e.message);
+    }
   }
   //Método para inserção de usuários.
   create(req, res) {
